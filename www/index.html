@@ -75,8 +75,7 @@
     }
 
     function deleteData() {
-      
-        UTdata.fetch()
+       UTdata.fetch()
       .then(function(results) {
           return results.delete();
       })
@@ -94,7 +93,22 @@
     }
 
     function updateData() {
-      $("#display").html("update does not work");
+       UTdata.fetch()
+      .then(function(results) {
+          results.set(key, 10);
+          return results.update();
+      })
+      .then(function(results) {
+          $("#display").removeClass();
+          $("#display").addClass("text-light");
+          $("#display").addClass("bg-success");
+          $("#display").html("delete success");
+      })
+      .catchh(function(error) {
+          $("#display").removeClass();
+          $("#display").addClass("bg-warning");
+          $("#display").html("delete fail:" + JSON.stringify(error));
+      })
     }
   </script>
 </head>
