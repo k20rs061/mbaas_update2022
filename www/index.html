@@ -19,9 +19,10 @@
       let value = parseInt($("#data").val());
       uTdata.set(key, value)
         .save()
+        //thenで成功、catchで失敗
         .then(function(results) {
-          $("#display").removeClass();
-          $("#display").addClass("bg-success");
+          $("#display").removeClass();//今あるクラスを全部外す→クラスが混ざることを避ける
+          $("#display").addClass("bg-success");//別のクラスを貼り付ける
           $("#display").html("enter success");
         })
         .catch(function(results) {
@@ -51,7 +52,22 @@
     }
 
     function sortData() {
-      $("#display").html("sort does not work");
+      UTdata.order(key,true).fetchAll()
+        .then(function(results) {
+          let msg = "";
+          for (let i = 0; i < results.length; i++) {
+            msg += results[i].get(key) + "<br>";
+          }
+          $("#display").removeClass();
+          $("#display").addClass("text-light");
+          $("#display").addClass("bg-primary");
+          $("#display").html(msg);
+        })
+        .catch(function(error) {
+          $("#display").removeClass();
+          $("#display").addClass("bg-warning");
+          $("#display").html("delete fail:" + JSON.stringify(error));
+        })
     }
 
     function countData() {
@@ -76,7 +92,7 @@
   </div>
   <div>
     <a onclick="fetchAll()" class="btn btn-outline-secondary" role="buton">Fetch All</a>
-    <a onclick="sortData()" class="btn btn-outline-primary" role="button">Sort</a>
+    <a onclick="sortData()" class="btn btn-outline-secondary" role="button">Sort</a>
     <a onclick="countData()" class="btn btn-outline-primary" role="button">Count</a>
     <a onclick="deleteData()" class="btn btn-outline-primary" role="buton">Delete</a>
   </div>
